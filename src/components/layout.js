@@ -18,6 +18,7 @@ const Layout = props => {
       site {
         siteMetadata {
           title
+          github
         }
       }
     }
@@ -42,9 +43,9 @@ const Layout = props => {
         <div className="flex-auto border-b border-gray-200 h-18 flex items-center justify-between px-4 sm:px-6 lg:mx-6 lg:px-0 xl:mx-8">
           <div className="h-14 self-center">MIEJSCE NA SEARCH ENGINE</div>
           <div className="flex align-middle">
-            <span>
+            <div className="flex mr-4 align-middle items-center">
               Dark mode <FiSun />
-            </span>
+            </div>
             <a
               href="https://discord.gg/eqP6VsV4Wa"
               className="mr-2 hover:text-indigo-400"
@@ -52,7 +53,7 @@ const Layout = props => {
               <FaDiscord size="2em" />
             </a>
             <a
-              href="https://github.com/HomeAssistantPL/wiki"
+              href={data.site.siteMetadata.github}
               className="hover:text-pink-900"
             >
               <AiFillGithub size="2em" />

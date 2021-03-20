@@ -2,6 +2,7 @@ module.exports = {
   siteMetadata: {
     title: "HomeAssistant PL",
     author: "pszafer@gmail.com",
+    github: "https://github.com/HomeAssistantPL/wiki",
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

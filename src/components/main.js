@@ -27,6 +27,15 @@ export default ({
           </Link>
         ))}
       <MDXProvider components={components}>{children}</MDXProvider>
+      <div>
+        <a
+          className="text-blue-400 hover:text-blue-600"
+          target="_blank"
+          href="https://github.com/HomeAssistantPL/wiki/edit/develop/src/materials/komunikacja/index.md"
+        >
+          Edytuj stronę na Github
+        </a>
+      </div>
     </main>
   )
 }
