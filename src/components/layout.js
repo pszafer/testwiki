@@ -68,7 +68,7 @@ const Layout = props => {
         <div className="flex">
           <Sidebar
             siteTitle={data.site.siteMetadata.title}
-            pathname={props.location.pathname}
+            pathname={props.location?.pathname}
           />
           {props.children}
         </div>

@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { useStaticQuery, graphql, Link } from "gatsby"
 
 const Sidebar = ({ siteTitle, pathname }) => {
+  if (!pathname) return null
   return (
     <div className="ml-4 fixed z-40 inset-0 flex-none h-full bg-black bg-opacity-25 w-full lg:bg-white lg:static lg:h-auto lg:overflow-y-visible lg:pt-0 lg:w-60 xl:w-72 lg:block overflow-hidden">
       <div className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:bg-transparent overflow-hidden lg:top-18 bg-white mr-24 lg:mr-0">
