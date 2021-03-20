@@ -1,8 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: "HomeAssistant PL",
+    author: "pszafer@gmail.com",
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -28,7 +27,30 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-gatsby-cloud`,
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "materials",
+        path: "./src/materials/",
+      },
+      __key: "materials",
+    },
+    {
+      resolve: "gatsby-plugin-page-creator",
+      options: {
+        path: "./src/materials",
+      },
+    },
+    {
+      resolve: "gatsby-plugin-mdx",
+      options: {
+        extensions: [".mdx", ".md"],
+        defaultLayouts: {
+          default: `${__dirname}/src/components/post.js`,
+        },
+      },
+    },
+    "gatsby-plugin-postcss",
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
