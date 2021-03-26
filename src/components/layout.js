@@ -39,6 +39,7 @@ const Layout = props => {
       />
       <Container as="main" maxW="1400px">
         <Box display={{ base: "block", md: "flex" }} height="100%">
+          test
           <Sidebar
             pathname={props.location?.pathname}
             isOpen={isOpen}
