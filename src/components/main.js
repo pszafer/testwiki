@@ -51,8 +51,8 @@ const Main = ({ pageContext = {}, children, toc, tags, connectedTags }) => {
   return (
     <Flex
       direction={{ sm: "column", lg: "row-reverse" }}
-      mt="4.5rem"
-      minHeight="76vh"
+      // mt="4.5rem"
+      minHeight="86vh"
     >
       {toc && toc.items && (
         <Box color="gray.500" ml={{ lg: 12 }} mb={{ sm: 3, lg: 0 }}>
