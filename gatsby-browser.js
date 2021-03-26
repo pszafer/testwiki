@@ -11,7 +11,7 @@ import Layout from "./src/components/layout"
 import { theme } from "./src/theme"
 export const wrapPageElement = ({ element, props }) => {
   return (
-    <ChakraProvider theme={theme} resetCSS>
+    <ChakraProvider theme={theme}>
       <Layout {...props}>{element}</Layout>
     </ChakraProvider>
   )
