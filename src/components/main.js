@@ -43,15 +43,19 @@ const TocItems = ({ level, items, linkColor, linkHoverColor }) => {
   ))
 }
 
-export default ({ pageContext = {}, children, toc, tags, connectedTags }) => {
+const Main = ({ pageContext = {}, children, toc, tags, connectedTags }) => {
   const { mdxChildren } = pageContext
   const linkHoverTocColor = useColorModeValue("gray.800", "white")
   const bottomListColor = useColorModeValue("blue.600", "gray.300")
   const bottomListHoverColor = useColorModeValue("blue.800", "white")
   return (
-    <Flex direction="row-reverse" mt="4.5rem" minHeight="76vh">
+    <Flex
+      direction={{ sm: "column", lg: "row-reverse" }}
+      mt="4.5rem"
+      minHeight="76vh"
+    >
       {toc && toc.items && (
-        <Box color="gray.500" ml={12}>
+        <Box color="gray.500" ml={{ lg: 12 }} mb={{ sm: 3, lg: 0 }}>
           <Heading as="h4" fontSize="sm" marginBottom={2} letterSpacing={2}>
             SPIS TREŚCI
           </Heading>
@@ -163,3 +167,5 @@ export default ({ pageContext = {}, children, toc, tags, connectedTags }) => {
     </Flex>
   )
 }
+
+export default Main

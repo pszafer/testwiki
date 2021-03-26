@@ -1,19 +1,61 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { Link as GatsbyLink, graphql } from "gatsby"
+import SEO from "./seo"
+import {
+  Box,
+  Link,
+  chakra,
+  useColorModeValue,
+  List,
+  ListItem,
+  ListIcon,
+  Heading,
+} from "@chakra-ui/react"
+import { FiArrowRightCircle } from "react-icons/fi"
 
 const Tags = ({ pageContext, data }) => {
+  const bottomListColor = useColorModeValue("blue.600", "gray.300")
+  const bottomListHoverColor = useColorModeValue("blue.800", "white")
   const { tag } = pageContext
   return (
-    <div className="pl-24 pr-14 py-4 min-w-0 w-full flex-auto lg:static lg:max-h-full lg:overflow-visible">
-      <h1 className="text-4xl font-light my-4 uppercase ">#{tag}</h1>
-      <ul className="mr-2 text-gray-500 list-disc">
-        {data.allMdx.edges.map(({ node: { slug, title } }) => (
-          <li className="underline text-blue-300">
-            <Link to={`/${slug}`}>{title || slug}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <SEO title={tag} />
+      <Box mt="4.5rem" minHeight="76vh">
+        <Heading as="h4" fontSize="sm" marginBottom={2} letterSpacing={2}>
+          Artykuły z tagiem{" "}
+          <chakra.span color="blue.700" fontSize="xl">
+            #{tag}
+          </chakra.span>
+        </Heading>
+        <Box mt={2} py={2}>
+          <List spacing={3} apply="mdx.ul" marginTop={1}>
+            {data.allMdx.edges.map(
+              ({
+                node: {
+                  slug,
+                  frontmatter: { title },
+                },
+              }) => (
+                <ListItem key={`tagsSite/${slug}`}>
+                  <ListIcon as={FiArrowRightCircle} color="blue.500" />
+                  <Link
+                    as={GatsbyLink}
+                    apply="mdx.a"
+                    to={`/${slug}`}
+                    color={bottomListColor}
+                    _hover={{
+                      color: bottomListHoverColor,
+                    }}
+                  >
+                    {title || slug.substring(slug.lastIndexOf("/") + 1)}
+                  </Link>
+                </ListItem>
+              )
+            )}
+          </List>
+        </Box>
+      </Box>
+    </>
   )
 }
 

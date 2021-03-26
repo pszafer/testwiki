@@ -8,7 +8,8 @@ import { Box } from "@chakra-ui/react"
 import Container from "./container"
 
 const Layout = props => {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const toggle = () => setIsOpen(!isOpen)
 
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -33,10 +34,16 @@ const Layout = props => {
         github={data.site.siteMetadata.github}
         facebook={data.site.siteMetadata.facebook}
         discord={data.site.siteMetadata.discord}
+        toggle={toggle}
+        isOpen={isOpen}
       />
       <Container as="main" maxW="1400px">
         <Box display={{ base: "block", md: "flex" }} height="100%">
-          <Sidebar pathname={props.location?.pathname} />
+          <Sidebar
+            pathname={props.location?.pathname}
+            isOpen={isOpen}
+            closeMenu={() => setIsOpen(false)}
+          />
           <div style={{ flex: 1 }}>
             <Box
               id="content"

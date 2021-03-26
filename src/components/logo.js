@@ -1,8 +1,8 @@
 import React from "react"
 import { StaticImage } from "gatsby-plugin-image"
-import { Box, Img } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 
-export default () => {
+const Logo = () => {
   return (
     <Box borderRadius="full" boxSize="40px">
       <StaticImage
@@ -14,3 +14,5 @@ export default () => {
     </Box>
   )
 }
+
+export default Logo

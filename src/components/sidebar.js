@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
 import { Box, Stack, Flex, Link, useColorModeValue } from "@chakra-ui/react"
 
-const Sidebar = ({ siteTitle, pathname, setMenuOpen }) => {
+const Sidebar = ({ pathname, isOpen, closeMenu }) => {
   const ref = React.useRef()
   if (!pathname) return null
   return (
@@ -11,28 +11,31 @@ const Sidebar = ({ siteTitle, pathname, setMenuOpen }) => {
       ref={ref}
       as="nav"
       aria-label="Main Navigation"
-      pos="sticky"
+      pos={{ base: "absolute", md: "sticky" }}
+      background="white"
       sx={{
         overscrollBehavior: "contain",
       }}
       top="5.5rem"
-      w="280px"
-      h="calc(((100vh - 4rem) - 64px) - 42px);"
+      w={{ base: "100%", md: "280px" }}
+      h={{ base: "", md: "calc(((100vh - 4rem) - 64px) - 42px);" }}
       pr="8"
       pb="8"
       pl="3"
       pt="8"
       overflowY="auto"
       className="sidebar-content"
+      zIndex={5}
       flexShrink={0}
-      display={{ base: "none", md: "block" }}
+      display={{ base: isOpen ? "block" : "none", md: "block" }}
+      flexBasis={{ base: "100%", md: "auto" }}
     >
-      <Menu pathname={pathname} />
+      <Menu pathname={pathname} closeMenu={closeMenu} />
     </Box>
   )
 }
 
-const Menu = ({ pathname, setMenuOpen }) => {
+const Menu = ({ pathname, closeMenu }) => {
   const data = useStaticQuery(graphql`
     query Menu {
       allMdx(
@@ -63,10 +66,9 @@ const Menu = ({ pathname, setMenuOpen }) => {
     }
   `)
   const cache = {}
-  const menuData = data.allMdx.edges.reduce((acc, curr, ind) => {
+  const menuData = data.allMdx.edges.reduce((acc, curr) => {
     const {
       node: {
-        id,
         slug,
         fields: { pathDepth },
       },
@@ -86,16 +88,6 @@ const Menu = ({ pathname, setMenuOpen }) => {
     return acc
   }, [])
 
-  const [expanded, setExpanded] = useState({})
-
-  const toggle = i => e => {
-    e.stopPropagation()
-    setExpanded({
-      ...expanded,
-      [i]: !expanded[i],
-    })
-  }
-
   return (
     <>
       {menuData.map(
@@ -114,9 +106,9 @@ const Menu = ({ pathname, setMenuOpen }) => {
           const isActive = pathname.includes(uri)
           return (
             <Flex key={id} flexDir="column">
-              {/* <Link > */}
               <StyledLink
                 to={uri}
+                onClick={closeMenu}
                 isActive={isActive}
                 fontSize="sm"
                 fontWeight={isActive ? "bold" : "normal"}
@@ -128,7 +120,12 @@ const Menu = ({ pathname, setMenuOpen }) => {
               </StyledLink>
               {sub && (
                 <Stack as="ul">
-                  <SubLinks mainUri={uri} links={sub} pathname={pathname} />
+                  <SubLinks
+                    mainUri={uri}
+                    links={sub}
+                    pathname={pathname}
+                    closeMenu={closeMenu}
+                  />
                 </Stack>
               )}
             </Flex>
@@ -168,7 +165,7 @@ const StyledLink = React.forwardRef(function StyledLink(props, ref) {
   )
 })
 
-const SubLinks = ({ links, pathname }) => {
+const SubLinks = ({ links, pathname, closeMenu }) => {
   if (!links) return null
   return (
     <>
@@ -186,7 +183,12 @@ const SubLinks = ({ links, pathname }) => {
           const subSlub = `/${slug}`
           const activeSub = pathname.includes(subSlub)
           return (
-            <StyledLink key={id} to={subSlub} isActive={activeSub}>
+            <StyledLink
+              key={id}
+              to={subSlub}
+              isActive={activeSub}
+              onClick={closeMenu}
+            >
               {title || slug.substring(slug.indexOf("/") + 1)}
             </StyledLink>
           )

@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Box,
-  chakra,
-  HTMLChakraProps,
-  Kbd,
-  useColorModeValue,
-} from "@chakra-ui/react"
+import { Alert, Box, chakra, Kbd, useColorModeValue } from "@chakra-ui/react"
 import React from "react"
 import CodeBlock from "./codeblock/codeblock"
 

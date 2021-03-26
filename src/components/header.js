@@ -1,10 +1,11 @@
 import {
   Flex,
   chakra,
-  Spacer,
   Heading,
   Link,
-  Center,
+  InputGroup,
+  InputLeftElement,
+  Input,
   HStack,
   Icon,
   Box,
@@ -14,14 +15,9 @@ import { Link as GatsbyLink } from "gatsby"
 import React from "react"
 import ThemeToggle from "./theme-toggle"
 import Logo from "./logo"
-import { AiFillGithub } from "react-icons/ai"
+import { AiFillGithub, AiOutlineSearch } from "react-icons/ai"
 import { FaDiscord, FaFacebook } from "react-icons/fa"
-import Search from "./search"
-
-const searchIndices = [
-  { name: `Pages`, title: `Pages` },
-  { name: `Posts`, title: `Blog Posts`, type: `postHit` },
-]
+import MenuButton from "./menu-button"
 
 const LogoHeader = ({ children }) => (
   <Box display={{ base: "none", md: "flex" }}>
@@ -40,9 +36,14 @@ const OnlyLogo = () => (
   </Box>
 )
 
-// const Search = () => <Box minW="300px">SEARCH</Box>
+const Search = () => (
+  <InputGroup mr={12}>
+    <InputLeftElement pointerEvents="none" children={<AiOutlineSearch />} />
+    <Input type="tel" placeholder="Search..." />
+  </InputGroup>
+)
 
-const Header = ({ siteTitle, github, discord, facebook }) => {
+const Header = ({ siteTitle, github, discord, facebook, toggle, isOpen }) => {
   const bg = useColorModeValue("white", "gray.800")
 
   return (
@@ -51,12 +52,10 @@ const Header = ({ siteTitle, github, discord, facebook }) => {
       width="full"
       pos="fixed"
       shadow="sm"
-      transition="box-shadow 0.2s"
       background={bg}
       borderBottom="1px"
       borderTop="6px solid"
       borderTopColor="blue.400"
-      width="full"
       zIndex={3}
     >
       <chakra.div height="4.5rem" mx="auto" maxW="1400px">
@@ -70,18 +69,13 @@ const Header = ({ siteTitle, github, discord, facebook }) => {
           align="center"
           justify="space-between"
         >
-          <Flex align="center">
+          <Flex align="center" flex={1} spacing={1}>
+            <MenuButton isOpen={isOpen} toggle={toggle} />
             <LogoHeader>{siteTitle}</LogoHeader>
             <OnlyLogo />
           </Flex>
-          <Flex
-            justify="flex-end"
-            w="100%"
-            maxW="824px"
-            align="center"
-            color="gray.400"
-          >
-            <Search collapse indices={searchIndices} />
+          <Flex justify="flex-end" flex={1} align="center" color="gray.400">
+            <Search />
 
             <HStack spacing="5" display={{ base: "none", md: "flex" }}>
               <Link href={discord} isExternal>
