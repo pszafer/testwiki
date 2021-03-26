@@ -23,8 +23,8 @@ const Layout = props => {
     }
   `)
 
-  const isMobile = window !== undefined && window.innerWidth < 760
-  const showSidebar = isMobile ? menuOpen : true
+  // const isMobile = window !== undefined && window.innerWidth < 760
+  // const showSidebar = isMobile ? menuOpen : true
 
   return (
     <>
