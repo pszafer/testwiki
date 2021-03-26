@@ -72,7 +72,8 @@ module.exports = {
         indexName: process.env.ALGOLIA_INDEX_NAME,
         queries,
         chunkSize: 10000, // default: 1000
-        skipIndexing: true,
+        matchFields: ["matchFields"],
+        // matchFields: ["slug", "modified"],
       },
     },
     "@chakra-ui/gatsby-plugin",

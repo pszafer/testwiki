@@ -12,7 +12,15 @@ const queryTemplate = (filters = ``, fields = ``) => `{
     }
   }`
 const flatten = arr =>
-  arr.map(({ frontmatter, ...rest }) => ({ ...frontmatter, ...rest }))
+  arr.map(({ frontmatter, ...rest }) => {
+    return {
+      ...frontmatter,
+      title:
+        frontmatter.title ||
+        rest.slug.substring(rest.slug.lastIndexOf("/") + 1),
+      ...rest,
+    }
+  })
 const settings = { attributesToSnippet: [`excerpt:20`] }
 const queries = [
   //   {
@@ -24,8 +32,8 @@ const queries = [
   {
     query: queryTemplate(`fileAbsolutePath: {regex: "/materials/"}`, `tags`),
     transformer: res => flatten(res.data.allMdx.nodes),
-    indexName: `HAPL`,
     settings,
+    matchFields: ["slug", "modified"],
   },
 ]
 module.exports = queries
