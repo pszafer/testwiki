@@ -5,6 +5,7 @@ import { Box, Stack, Flex, Link, useColorModeValue } from "@chakra-ui/react"
 
 const Sidebar = ({ pathname, isOpen, closeMenu }) => {
   const ref = React.useRef()
+  const bg = useColorModeValue("white", "gray.800")
   if (!pathname) return null
   return (
     <Box
@@ -12,7 +13,7 @@ const Sidebar = ({ pathname, isOpen, closeMenu }) => {
       as="nav"
       aria-label="Main Navigation"
       pos={{ base: "absolute", md: "sticky" }}
-      background="white"
+      background={bg}
       sx={{
         overscrollBehavior: "contain",
       }}
