@@ -28,5 +28,4 @@ const queries = [
     settings,
   },
 ]
-console.log("ALGOLIA!", queries)
 module.exports = queries
