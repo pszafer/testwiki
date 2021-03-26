@@ -27,6 +27,11 @@ Komunikacja bezprzewodowa powinna być stosowana w przypadku gdy:
 - urządzenie będzie przenoszone z miejsca na miejsce
 - urządzenie nie jest krytyczne i ewentualne problemy z jego działaniem nie będą bardzo bolesne
 
+```python
+print("hohoj")
+```
+
+
 [Rodzaje komunikacji przewodowej](../Rodzaje-komunikacji-przewodowej)
 
 [Rodzaje komunikacji bezprzewodowej](../Rodzaje-komunikacji-bezprzewodowej)

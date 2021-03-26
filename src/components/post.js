@@ -1,16 +1,61 @@
-import React, { useState } from "react"
-import PropTypes from "prop-types"
-import Sidebar from "../components/sidebar"
-import { useStaticQuery, graphql } from "gatsby"
-import MenuButton from "./menu-button"
-import Header from "./header"
+import React from "react"
+import { graphql } from "gatsby"
 import Main from "./main"
-import { AiFillGithub } from "react-icons/ai"
-import "../styles/global.css"
-// import "./layout.css"
+import { MDXRenderer } from "gatsby-plugin-mdx"
+import SEO from "./seo"
 
-const Post = props => (
-  <Main pageContext={props.pageContext}>{props.children}</Main>
-)
+const Post = ({ pageContext, data }) => {
+  const {
+    mdx: {
+      body,
+      tableOfContents,
+      slug,
+      frontmatter: { tags, title },
+      excerpt,
+    },
+    allMdx: connectedTags,
+  } = data
+  return (
+    <Main
+      tags={tags}
+      pageContext={pageContext}
+      toc={tableOfContents}
+      connectedTags={connectedTags}
+    >
+      <SEO
+        title={title || slug.substring(slug.lastIndexOf("/") + 1)}
+        description={excerpt}
+      />
+      <MDXRenderer>{body}</MDXRenderer>
+    </Main>
+  )
+}
 
 export default Post
+
+export const pageQuery = graphql`
+  query MyQuery($id: String, $tags: [String!]) {
+    mdx(id: { eq: $id }) {
+      frontmatter {
+        title
+        tags
+      }
+      slug
+      tableOfContents(maxDepth: 3)
+      body
+      excerpt(pruneLength: 10)
+    }
+    allMdx(filter: { frontmatter: { tags: { in: $tags } }, id: { ne: $id } }) {
+      edges {
+        node {
+          slug
+          frontmatter {
+            title
+            tags
+          }
+          id
+        }
+      }
+    }
+  }
+`

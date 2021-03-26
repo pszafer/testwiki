@@ -1,19 +1,38 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
+import { Box, Stack, Flex, Link, useColorModeValue } from "@chakra-ui/react"
 
-const Sidebar = ({ siteTitle, pathname }) => {
+const Sidebar = ({ siteTitle, pathname, setMenuOpen }) => {
+  const ref = React.useRef()
   if (!pathname) return null
   return (
-    <div className="ml-4 fixed z-40 inset-0 flex-none h-full bg-black bg-opacity-25 w-full lg:bg-white lg:static lg:h-auto lg:overflow-y-visible lg:pt-0 lg:w-60 xl:w-72 lg:block overflow-hidden">
-      <div className="h-full overflow-y-auto scrolling-touch lg:h-auto lg:block lg:bg-transparent overflow-hidden lg:top-18 bg-white mr-24 lg:mr-0">
-        <Menu pathname={pathname} />
-      </div>
-    </div>
+    <Box
+      ref={ref}
+      as="nav"
+      aria-label="Main Navigation"
+      pos="sticky"
+      sx={{
+        overscrollBehavior: "contain",
+      }}
+      top="5.5rem"
+      w="280px"
+      h="calc(((100vh - 4rem) - 64px) - 42px);"
+      pr="8"
+      pb="8"
+      pl="3"
+      pt="8"
+      overflowY="auto"
+      className="sidebar-content"
+      flexShrink={0}
+      display={{ base: "none", md: "block" }}
+    >
+      <Menu pathname={pathname} />
+    </Box>
   )
 }
 
-const Menu = ({ pathname }) => {
+const Menu = ({ pathname, setMenuOpen }) => {
   const data = useStaticQuery(graphql`
     query Menu {
       allMdx(
@@ -78,96 +97,81 @@ const Menu = ({ pathname }) => {
   }
 
   return (
-    <nav className="px-1 overflow-y-auto sm:px-3 xl:px-5 pb-10 lg:pt-10 lg:pb-14 sticky?lg:h-(screen-18)">
-      <ul className="list-none p-0 m-0 ">
-        {menuData.map(
-          (
-            {
-              node: {
-                id,
-                slug,
-                frontmatter: { title },
-              },
-              sub,
+    <>
+      {menuData.map(
+        (
+          {
+            node: {
+              id,
+              slug,
+              frontmatter: { title },
             },
-            i
-          ) => {
-            const uri = `/${slug}`
-            const isActive = pathname.includes(uri)
-            return (
-              <li key={id}>
-                <div
-                  className={`${
-                    isActive ? "bg-green-50	" : ""
-                  } flex items-center font-semibold my-2`}
-                >
-                  {sub && (
-                    <AccordionButton
-                      href={uri}
-                      open={expanded[i]}
-                      className="ml-auto"
-                      onClick={toggle(i)}
-                    />
-                  )}
-                  <Link
-                    to={uri}
-                    activeClassName="active"
-                    partiallyActive={true}
-                  >
-                    {title}
-                  </Link>
-                </div>
-                <SubLinks
-                  mainUri={uri}
-                  links={sub}
-                  open={expanded[i]}
-                  pathname={pathname}
-                />
-              </li>
-            )
-          }
-        )}
-      </ul>
-    </nav>
+            sub,
+          },
+          i
+        ) => {
+          const uri = `/${slug}`
+          const isActive = pathname.includes(uri)
+          return (
+            <Flex key={id} flexDir="column">
+              {/* <Link > */}
+              <StyledLink
+                to={uri}
+                isActive={isActive}
+                fontSize="sm"
+                fontWeight={isActive ? "bold" : "normal"}
+                my="1.25rem"
+                textTransform="uppercase"
+                letterSpacing="wider"
+              >
+                {title}
+              </StyledLink>
+              {sub && (
+                <Stack as="ul">
+                  <SubLinks mainUri={uri} links={sub} pathname={pathname} />
+                </Stack>
+              )}
+            </Flex>
+          )
+        }
+      )}
+    </>
   )
 }
 
-export const AccordionButton = props => {
-  const transform = props.open ? "rotate(0 8 8)" : "rotate(-90 8 8)"
-  const disabled = props.pathname ? props.pathname.includes(props.href) : false
+const StyledLink = React.forwardRef(function StyledLink(props, ref) {
+  const { isActive, ...rest } = props
 
   return (
-    <button
-      title="Expand Section"
-      disabled={disabled}
-      {...props}
-      onMouseDown={e => e.preventDefault()}
-      className="appearance-none flex items-center p-2 m-0 border-0 border-r-0 bg-transparent"
-    >
-      <svg viewBox="0 0 16 16" width="12" height="12">
-        <g
-          style={{
-            transformOrigin: "8 8",
-            transition: "transform .1s ease-out",
-          }}
-          transform={transform}
-        >
-          <path
-            stroke="currentcolor"
-            strokeWidth="2"
-            fill="none"
-            d="M14 6 L8 12 L2 6"
-          />
-        </g>
-      </svg>
-    </button>
+    <Link
+      as={GatsbyLink}
+      aria-current={isActive ? "page" : undefined}
+      width="100%"
+      px="3"
+      py="1"
+      rounded="md"
+      ref={ref}
+      fontSize="sm"
+      fontWeight="500"
+      color={useColorModeValue("gray.600", "whiteAlpha.900")}
+      transition="all 0.2s"
+      _activeLink={{
+        bg: useColorModeValue("blue.50", "rgba(48, 140, 122, 0.3)"),
+        color: useColorModeValue("blue.700", "blue.200"),
+        fontWeight: "600",
+      }}
+      _hover={{
+        color: useColorModeValue("gray.900", "white"),
+      }}
+      {...rest}
+    />
   )
-}
+})
 
-const SubLinks = ({ open, links, pathname, mainUri }) => {
+const SubLinks = ({ links, pathname }) => {
   if (!links) return null
   return (
-    <ul className="">
+    <>
       {links.map(
         (
           {
@@ -182,18 +186,13 @@ const SubLinks = ({ open, links, pathname, mainUri }) => {
           const subSlub = `/${slug}`
           const activeSub = pathname.includes(subSlub)
           return (
-            <li
-              key={id}
-              className={`${activeSub ? "bg-green-100" : ""} pl-8 my-2`}
-            >
-              <Link to={subSlub} className="text-sm">
-                {title || slug.substring(slug.indexOf("/") + 1)}
-              </Link>
-            </li>
+            <StyledLink key={id} to={subSlub} isActive={activeSub}>
+              {title || slug.substring(slug.indexOf("/") + 1)}
+            </StyledLink>
           )
         }
       )}
-    </ul>
+    </>
   )
 }
 
