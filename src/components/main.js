@@ -49,13 +49,9 @@ const Main = ({ pageContext = {}, children, toc, tags, connectedTags }) => {
   const bottomListColor = useColorModeValue("blue.600", "gray.300")
   const bottomListHoverColor = useColorModeValue("blue.800", "white")
   return (
-    <Flex
-      direction={{ sm: "column", lg: "row-reverse" }}
-      // mt="4.5rem"
-      minHeight="86vh"
-    >
+    <Flex direction={{ base: "column", lg: "row-reverse" }} minHeight="86vh">
       {toc && toc.items && (
-        <Box color="gray.500" ml={{ lg: 12 }} mb={{ sm: 3, lg: 0 }}>
+        <Box color="gray.500" ml={{ lg: 12 }} mb={{ base: 3, lg: 0 }}>
           <Heading as="h4" fontSize="sm" marginBottom={2} letterSpacing={2}>
             SPIS TREŚCI
           </Heading>
