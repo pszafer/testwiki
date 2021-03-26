@@ -8,7 +8,7 @@ export const Container = (props: BoxProps) => (
     pt="3"
     maxW={{ base: "xl", md: "7xl" }}
     mx="auto"
-    px={{ base: "6", md: "8" }}
+    px={{ base: "0", lg: "8" }}
     {...props}
   />
 )
