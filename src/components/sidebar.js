@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
-import { Box, Stack, Flex, Link, useColorModeValue } from "@chakra-ui/react"
+import { Box, Flex, Link, useColorModeValue } from "@chakra-ui/react"
 
 const Sidebar = ({ pathname, isOpen, closeMenu }) => {
   const ref = React.useRef()
@@ -19,7 +19,7 @@ const Sidebar = ({ pathname, isOpen, closeMenu }) => {
       }}
       top="5.5rem"
       w={{ base: "100%", md: "280px" }}
-      h={{ base: "", md: "calc(((100vh - 4rem) - 64px) - 42px);" }}
+      h={{ base: "100%", md: "calc(((100vh - 4rem) - 64px) - 42px);" }}
       pr="8"
       pb="8"
       pl="3"
@@ -66,6 +66,16 @@ const Menu = ({ pathname, closeMenu }) => {
       }
     }
   `)
+  const [expanded, setExpanded] = useState({})
+
+  const toggle = i => e => {
+    e.stopPropagation()
+    setExpanded({
+      ...expanded,
+      [i]: !expanded[i],
+    })
+  }
+
   const cache = {}
   const menuData = data.allMdx.edges.reduce((acc, curr) => {
     const {
@@ -89,6 +99,13 @@ const Menu = ({ pathname, closeMenu }) => {
     return acc
   }, [])
 
+  const navColor = useColorModeValue("gray.600", "whiteAlpha.900")
+  const navActiveBgColor = useColorModeValue(
+    "blue.50",
+    "rgba(48, 140, 122, 0.3)"
+  )
+  const activeNavColor = useColorModeValue("blue.700", "blue.200")
+
   return (
     <>
       {menuData.map(
@@ -107,27 +124,39 @@ const Menu = ({ pathname, closeMenu }) => {
           const isActive = pathname.includes(uri)
           return (
             <Flex key={id} flexDir="column">
-              <StyledLink
-                to={uri}
-                onClick={closeMenu}
-                isActive={isActive}
-                fontSize="sm"
-                fontWeight={isActive ? "bold" : "normal"}
-                my="1.25rem"
-                textTransform="uppercase"
-                letterSpacing="wider"
-              >
-                {title}
-              </StyledLink>
+              <Box bg={isActive && navActiveBgColor}>
+                {sub && (
+                  <AccordionButton
+                    href={uri}
+                    mainUri={uri}
+                    pathname={pathname}
+                    open={expanded[i]}
+                    onClick={toggle(i)}
+                  />
+                )}
+                <StyledLink
+                  to={uri}
+                  onClick={closeMenu}
+                  isActive={isActive}
+                  fontSize="sm"
+                  fontWeight={isActive ? "bold" : "normal"}
+                  my="1.25rem"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                >
+                  {title}
+                </StyledLink>
+              </Box>
               {sub && (
-                <Stack as="ul">
+                <Flex ml={"4.5px"} flexDir="column">
                   <SubLinks
                     mainUri={uri}
                     links={sub}
                     pathname={pathname}
+                    open={expanded[i]}
                     closeMenu={closeMenu}
                   />
-                </Stack>
+                </Flex>
               )}
             </Flex>
           )
@@ -146,7 +175,7 @@ const StyledLink = React.forwardRef(function StyledLink(props, ref) {
       aria-current={isActive ? "page" : undefined}
       width="100%"
       px="3"
-      py="1"
+      py={1}
       rounded="md"
       ref={ref}
       fontSize="sm"
@@ -166,8 +195,8 @@ const StyledLink = React.forwardRef(function StyledLink(props, ref) {
   )
 })
 
-const SubLinks = ({ links, pathname, closeMenu }) => {
-  if (!links) return null
+const SubLinks = ({ links, pathname, closeMenu, open, mainUri }) => {
+  if (!links || (!open && !pathname.includes(mainUri))) return null
   return (
     <>
       {links.map(
@@ -189,6 +218,12 @@ const SubLinks = ({ links, pathname, closeMenu }) => {
               to={subSlub}
               isActive={activeSub}
               onClick={closeMenu}
+              px={4}
+              py={1}
+              borderLeftColor="gray.200"
+              borderLeftWidth={2}
+              borderLeftRadius={0}
+              mt={0}
             >
               {title || slug.substring(slug.indexOf("/") + 1)}
             </StyledLink>
@@ -196,6 +231,42 @@ const SubLinks = ({ links, pathname, closeMenu }) => {
         }
       )}
     </>
+  )
+}
+
+const AccordionButton = props => {
+  const transform =
+    props.open || props.pathname.includes(props.mainUri)
+      ? "rotate(0 8 8)"
+      : "rotate(-90 8 8)"
+  console.log("is open,", props)
+  const disabled = props.pathname ? props.pathname.includes(props.href) : false
+
+  return (
+    <button
+      title="Expand Section"
+      disabled={disabled}
+      {...props}
+      onMouseDown={e => e.preventDefault()}
+      className="appearance-none flex items-center p-2 m-0 border-0 border-r-0 bg-transparent"
+    >
+      <svg viewBox="0 0 16 16" width="12" height="12">
+        <g
+          style={{
+            transformOrigin: "8 8",
+            transition: "transform .1s ease-out",
+          }}
+          transform={transform}
+        >
+          <path
+            stroke="currentcolor"
+            strokeWidth="2"
+            fill="none"
+            d="M14 6 L8 12 L2 6"
+          />
+        </g>
+      </svg>
+    </button>
   )
 }
 
