@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import Sidebar from "../components/sidebar"
 import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
-
+import MenuButton from "./menu-button"
 import { Box } from "@chakra-ui/react"
 import Container from "./container"
 
@@ -24,11 +24,9 @@ const Layout = props => {
     }
   `)
 
-  // const isMobile = window !== undefined && window.innerWidth < 760
-  // const showSidebar = isMobile ? menuOpen : true
-
   return (
     <>
+      <MenuButton isOpen={isOpen} toggle={toggle} />
       <Header
         siteTitle={data.site.siteMetadata.title}
         github={data.site.siteMetadata.github}
@@ -39,7 +37,6 @@ const Layout = props => {
       />
       <Container as="main" maxW="1400px">
         <Box display={{ base: "block", md: "flex" }} height="100%">
-          test
           <Sidebar
             pathname={props.location?.pathname}
             isOpen={isOpen}

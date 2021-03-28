@@ -1,7 +1,14 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
-import { Box, Flex, Link, useColorModeValue } from "@chakra-ui/react"
+import {
+  Box,
+  Flex,
+  Link,
+  useColorModeValue,
+  chakra,
+  Button,
+} from "@chakra-ui/react"
 
 const Sidebar = ({ pathname, isOpen, closeMenu }) => {
   const ref = React.useRef()
@@ -121,42 +128,48 @@ const Menu = ({ pathname, closeMenu }) => {
           i
         ) => {
           const uri = `/${slug}`
-          const isActive = pathname.includes(uri)
+          const isActive = pathname === uri
           return (
             <Flex key={id} flexDir="column">
-              <Box bg={isActive && navActiveBgColor}>
-                {sub && (
-                  <AccordionButton
-                    href={uri}
-                    mainUri={uri}
-                    pathname={pathname}
-                    open={expanded[i]}
-                    onClick={toggle(i)}
-                  />
-                )}
-                <StyledLink
-                  to={uri}
-                  onClick={closeMenu}
-                  isActive={isActive}
-                  fontSize="sm"
-                  fontWeight={isActive ? "bold" : "normal"}
-                  my="1.25rem"
-                  textTransform="uppercase"
-                  letterSpacing="wider"
-                >
-                  {title}
-                </StyledLink>
-              </Box>
-              {sub && (
-                <Flex ml={"4.5px"} flexDir="column">
-                  <SubLinks
-                    mainUri={uri}
-                    links={sub}
-                    pathname={pathname}
-                    open={expanded[i]}
-                    closeMenu={closeMenu}
-                  />
-                </Flex>
+              {sub ? (
+                <>
+                  <Box>
+                    <AccordionButton
+                      href={uri}
+                      mainUri={uri}
+                      pathname={pathname}
+                      open={expanded[i]}
+                      onClick={toggle(i)}
+                    >
+                      <chakra.span ml={3}>{title}</chakra.span>
+                    </AccordionButton>
+                  </Box>
+                  <Flex ml={"4.5px"} pb={4} flexDir="column">
+                    <SubLinks
+                      mainUri={uri}
+                      isMainActive={isActive}
+                      links={sub}
+                      pathname={pathname}
+                      open={expanded[i]}
+                      closeMenu={closeMenu}
+                    />
+                  </Flex>
+                </>
+              ) : (
+                <Box bg={isActive && navActiveBgColor}>
+                  <StyledLink
+                    to={uri}
+                    onClick={closeMenu}
+                    isActive={isActive}
+                    fontSize="sm"
+                    fontWeight={isActive ? "bold" : "normal"}
+                    my="1.25rem"
+                    textTransform="uppercase"
+                    letterSpacing="wider"
+                  >
+                    {title}
+                  </StyledLink>
+                </Box>
               )}
             </Flex>
           )
@@ -174,7 +187,7 @@ const StyledLink = React.forwardRef(function StyledLink(props, ref) {
       as={GatsbyLink}
       aria-current={isActive ? "page" : undefined}
       width="100%"
-      px="3"
+      px={4}
       py={1}
       rounded="md"
       ref={ref}
@@ -182,11 +195,6 @@ const StyledLink = React.forwardRef(function StyledLink(props, ref) {
       fontWeight="500"
       color={useColorModeValue("gray.600", "whiteAlpha.900")}
       transition="all 0.2s"
-      _activeLink={{
-        bg: useColorModeValue("blue.50", "rgba(48, 140, 122, 0.3)"),
-        color: useColorModeValue("blue.700", "blue.200"),
-        fontWeight: "600",
-      }}
       _hover={{
         color: useColorModeValue("gray.900", "white"),
       }}
@@ -195,10 +203,37 @@ const StyledLink = React.forwardRef(function StyledLink(props, ref) {
   )
 })
 
-const SubLinks = ({ links, pathname, closeMenu, open, mainUri }) => {
+const SubLinks = ({
+  links,
+  pathname,
+  closeMenu,
+  open,
+  mainUri,
+  isMainActive,
+}) => {
+  const activeBg = useColorModeValue("blue.50", "rgba(48, 140, 122, 0.3)")
+  const activeColor = useColorModeValue("blue.700", "blue.200")
   if (!links || (!open && !pathname.includes(mainUri))) return null
   return (
     <>
+      <StyledLink
+        to={mainUri}
+        isActive={isMainActive}
+        px={4}
+        py={1}
+        onClick={closeMenu}
+        borderLeftColor="gray.200"
+        borderLeftWidth={2}
+        borderLeftRadius={0}
+        mt={0}
+        _activeLink={{
+          bg: activeBg,
+          color: activeColor,
+          fontWeight: "600",
+        }}
+      >
+        Ogólnie
+      </StyledLink>
       {links.map(
         (
           {
@@ -219,11 +254,16 @@ const SubLinks = ({ links, pathname, closeMenu, open, mainUri }) => {
               isActive={activeSub}
               onClick={closeMenu}
               px={4}
-              py={1}
+              py={3}
               borderLeftColor="gray.200"
               borderLeftWidth={2}
               borderLeftRadius={0}
               mt={0}
+              _activeLink={{
+                bg: activeBg,
+                color: activeColor,
+                fontWeight: "600",
+              }}
             >
               {title || slug.substring(slug.indexOf("/") + 1)}
             </StyledLink>
@@ -239,16 +279,15 @@ const AccordionButton = props => {
     props.open || props.pathname.includes(props.mainUri)
       ? "rotate(0 8 8)"
       : "rotate(-90 8 8)"
-  console.log("is open,", props)
   const disabled = props.pathname ? props.pathname.includes(props.href) : false
 
   return (
-    <button
-      title="Expand Section"
+    <Button
+      variant="link"
+      py={3}
       disabled={disabled}
       {...props}
       onMouseDown={e => e.preventDefault()}
-      className="appearance-none flex items-center p-2 m-0 border-0 border-r-0 bg-transparent"
     >
       <svg viewBox="0 0 16 16" width="12" height="12">
         <g
@@ -266,7 +305,8 @@ const AccordionButton = props => {
           />
         </g>
       </svg>
-    </button>
+      {props.children}
+    </Button>
   )
 }
 

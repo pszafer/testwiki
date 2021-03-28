@@ -17,7 +17,6 @@ import ThemeToggle from "./theme-toggle"
 import Logo from "./logo"
 import { AiFillGithub, AiOutlineSearch } from "react-icons/ai"
 import { FaDiscord, FaFacebook } from "react-icons/fa"
-import MenuButton from "./menu-button"
 
 const LogoHeader = ({ children }) => (
   <Box display={{ base: "none", md: "flex" }}>
@@ -32,7 +31,9 @@ const LogoHeader = ({ children }) => (
 
 const OnlyLogo = () => (
   <Box minW="3rem" display={{ base: "block", md: "none" }}>
-    <Logo />
+    <Link as={GatsbyLink} to="/" _hover={{ textDecor: "none" }} display="flex">
+      <Logo />
+    </Link>
   </Box>
 )
 
@@ -43,7 +44,7 @@ const Search = () => (
   </InputGroup>
 )
 
-const Header = ({ siteTitle, github, discord, facebook, toggle, isOpen }) => {
+const Header = ({ siteTitle, github, discord, facebook }) => {
   const bg = useColorModeValue("white", "gray.800")
 
   return (
@@ -70,7 +71,6 @@ const Header = ({ siteTitle, github, discord, facebook, toggle, isOpen }) => {
           justify="space-between"
         >
           <Flex align="center" flex={1} spacing={1}>
-            <MenuButton isOpen={isOpen} toggle={toggle} />
             <LogoHeader>{siteTitle}</LogoHeader>
             <OnlyLogo />
           </Flex>

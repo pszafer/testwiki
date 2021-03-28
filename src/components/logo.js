@@ -8,7 +8,7 @@ const Logo = () => {
       <StaticImage
         height={40}
         width={40}
-        src="../images/logo.png"
+        src="../images/logo.svg"
         alt="Segun Adebayo"
       />
     </Box>
