@@ -286,6 +286,9 @@ const AccordionButton = props => {
       variant="link"
       py={3}
       disabled={disabled}
+      _disabled={{
+        color: "blue.600",
+      }}
       {...props}
       onMouseDown={e => e.preventDefault()}
     >

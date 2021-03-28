@@ -29,7 +29,8 @@ module.exports = {
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
-        display: `minimal-ui`,
+        theme_color_in_head: false,
+        display: `standalone`,
         icon: `src/images/logo.svg`, // This path is relative to the root of the site.
       },
     },
@@ -64,22 +65,22 @@ module.exports = {
         ],
       },
     },
-    {
-      resolve: `gatsby-plugin-algolia`,
-      options: {
-        appId: process.env.GATSBY_ALGOLIA_APP_ID,
-        apiKey: process.env.ALGOLIA_ADMIN_KEY,
-        indexName: process.env.ALGOLIA_INDEX_NAME,
-        queries,
-        chunkSize: 10000, // default: 1000
-        matchFields: ["matchFields"],
-        // matchFields: ["slug", "modified"],
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-algolia`,
+    //   options: {
+    //     appId: process.env.GATSBY_ALGOLIA_APP_ID,
+    //     apiKey: process.env.ALGOLIA_ADMIN_KEY,
+    //     indexName: process.env.ALGOLIA_INDEX_NAME,
+    //     queries,
+    //     chunkSize: 10000, // default: 1000
+    //     matchFields: ["matchFields"],
+    //     // matchFields: ["slug", "modified"],
+    //   },
+    // },
     "@chakra-ui/gatsby-plugin",
     // "gatsby-plugin-postcss",
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+    `gatsby-plugin-offline`,
   ],
 }
