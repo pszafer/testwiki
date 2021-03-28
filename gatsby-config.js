@@ -8,6 +8,7 @@ module.exports = {
     github: "https://github.com/HomeAssistantPL/wiki",
     facebook: "https://www.facebook.com/groups/homeassistantpolska/",
     discord: "https://discord.gg/eqP6VsV4Wa",
+    siteUrl: "https://hapl.help",
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -24,11 +25,10 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `home-assistant-polska-wiki`,
+        name: `HA Polska Wiki`,
         short_name: `HAPL`,
         start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
+        background_color: `#63B3ED`,
         theme_color_in_head: false,
         display: `standalone`,
         icon: `src/images/logo.svg`, // This path is relative to the root of the site.
@@ -82,5 +82,6 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     `gatsby-plugin-offline`,
+    `gatsby-plugin-sitemap`,
   ],
 }

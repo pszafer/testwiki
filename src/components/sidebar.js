@@ -274,12 +274,10 @@ const SubLinks = ({
   )
 }
 
-const AccordionButton = props => {
+const AccordionButton = ({ mainUri, open, pathname, children, ...props }) => {
   const transform =
-    props.open || props.pathname.includes(props.mainUri)
-      ? "rotate(0 8 8)"
-      : "rotate(-90 8 8)"
-  const disabled = props.pathname ? props.pathname.includes(props.href) : false
+    open || pathname.includes(mainUri) ? "rotate(0 8 8)" : "rotate(-90 8 8)"
+  const disabled = pathname ? pathname.includes(props.href) : false
 
   return (
     <Button
@@ -308,7 +306,7 @@ const AccordionButton = props => {
           />
         </g>
       </svg>
-      {props.children}
+      {children}
     </Button>
   )
 }
