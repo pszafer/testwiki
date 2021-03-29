@@ -19,7 +19,7 @@ const Sidebar = ({ pathname, isOpen, closeMenu }) => {
       ref={ref}
       as="nav"
       aria-label="Main Navigation"
-      pos={{ base: "absolute", md: "sticky" }}
+      pos={{ base: "fixed", md: "sticky" }}
       background={bg}
       sx={{
         overscrollBehavior: "contain",
@@ -28,7 +28,7 @@ const Sidebar = ({ pathname, isOpen, closeMenu }) => {
       w={{ base: "100%", md: "280px" }}
       h={{ base: "100%", md: "calc(((100vh - 4rem) - 64px) - 42px);" }}
       pr="8"
-      pb="8"
+      pb={48}
       pl="3"
       pt="8"
       overflowY="auto"
