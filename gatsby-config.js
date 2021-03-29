@@ -83,5 +83,39 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     `gatsby-plugin-offline`,
     `gatsby-plugin-sitemap`,
+    {
+      resolve: "gatsby-plugin-local-search",
+      options: {
+        name: "pages",
+        engine: "flexsearch",
+        engineOptions: "speed",
+        query: `
+          {
+            allMdx(filter: {fileAbsolutePath: {regex: "/materials/"}}) {
+              nodes {
+                id
+                frontmatter {
+                  title
+                }
+                slug
+                rawBody
+              }
+            }
+          }
+        `,
+        ref: "id",
+        index: ["title", "body"],
+        store: ["id", "path", "title", "body"],
+        normalizer: ({ data }) =>
+          data.allMdx.nodes.map(node => ({
+            id: node.id,
+            slug: node.slug,
+            title:
+              node.frontmatter.title ||
+              node.slug.substring(node.slug.lastIndexOf("/") + 1),
+            body: node.rawBody,
+          })),
+      },
+    },
   ],
 }

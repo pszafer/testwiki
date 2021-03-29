@@ -14,6 +14,7 @@
     "@mdx-js/react": "^1.6.22",
     "algoliasearch": "^4.8.6",
     "dotenv": "^8.2.0",
+    "formik": "^2.2.6",
     "framer-motion": "^4.0.3",
     "gatsby": "^3.0.1",
     "gatsby-plugin-algolia": "^0.17.0",
@@ -35,6 +36,7 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.2.0",
     "react-instantsearch-dom": "^6.10.3",
+    "react-use-flexsearch": "^0.1.1",
     "rehype-autolink-headings": "^5.0.1",
     "rehype-slug": "^4.0.1",
     "remark-toc": "^7.2.0"

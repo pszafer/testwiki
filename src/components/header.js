@@ -17,6 +17,7 @@ import ThemeToggle from "./theme-toggle"
 import Logo from "./logo"
 import { AiFillGithub, AiOutlineSearch } from "react-icons/ai"
 import { FaDiscord, FaFacebook } from "react-icons/fa"
+import SearchBar from "./search3"
 
 const LogoHeader = ({ children }) => (
   <Box display={{ base: "none", md: "flex" }}>
@@ -40,7 +41,7 @@ const OnlyLogo = () => (
 const Search = () => (
   <InputGroup mr={12}>
     <InputLeftElement pointerEvents="none" children={<AiOutlineSearch />} />
-    <Input type="tel" placeholder="Search..." />
+    {/* <SearchBar /> */}
   </InputGroup>
 )
 
