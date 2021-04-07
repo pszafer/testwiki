@@ -1,22 +1,33 @@
-import React from "react"
-import { Button, useColorModeValue } from "@chakra-ui/react"
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons"
+/** @jsx jsx */
+import { jsx, Button } from "theme-ui"
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai"
 
 const MenuButton = ({ toggle, isOpen }) => {
   return (
     <Button
-      display={{ base: "flex", md: "none" }}
-      position="fixed"
+      sx={{
+        display: ["flex", "flex", "none"],
+        position: "fixed",
+        color: "primary",
+        bg: "menuBg",
+        zIndex: 10,
+        bottom: "3em",
+        py: 3,
+        px: 3,
+        right: "3em",
+        borderRadius: "full",
+        outline: "none",
+        "&:focus": {
+          outline: "none",
+        },
+      }}
       onClick={toggle}
-      bg={useColorModeValue("blue.200", "gray.600")}
-      zIndex={10}
-      bottom={12}
-      py={8}
-      px={6}
-      right={10}
-      borderRadius="full"
     >
-      {isOpen ? <CloseIcon w={6} h={6} /> : <HamburgerIcon w={6} h={6} />}
+      {isOpen ? (
+        <AiOutlineClose size="1.5em" />
+      ) : (
+        <AiOutlineMenu size="1.5em" />
+      )}
     </Button>
   )
 }

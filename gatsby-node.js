@@ -16,8 +16,8 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
-  const postTemplate = require.resolve(`./src/components/post.js`)
-  const tagTemplate = require.resolve(`./src/components/tags.js`)
+  const postTemplate = require.resolve(`./src/templates/post.js`)
+  const tagTemplate = require.resolve(`./src/templates/tags.js`)
   const result = await graphql(`
     query Mdx {
       postsMdx: allMdx(

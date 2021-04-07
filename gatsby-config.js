@@ -48,7 +48,7 @@ module.exports = {
       options: {
         extensions: [".mdx", ".md"],
         defaultLayouts: {
-          default: `${__dirname}/src/components/index-template.js`,
+          default: `${__dirname}/src/templates/index-template.js`,
         },
         gatsbyRemarkPlugins: [
           {
@@ -61,7 +61,10 @@ module.exports = {
         // remarkPlugins: [require("remark-toc")],
         rehypePlugins: [
           require("rehype-slug"),
-          [require("rehype-autolink-headings"), { behavior: "wrap" }],
+          // [
+          //   require("rehype-autolink-headings"),
+          //   { behavior: "wrap", properties: { variant: "mdx.link" } },
+          // ],
         ],
       },
     },
@@ -77,7 +80,14 @@ module.exports = {
     //     // matchFields: ["slug", "modified"],
     //   },
     // },
-    "@chakra-ui/gatsby-plugin",
+    {
+      resolve: "gatsby-plugin-theme-ui",
+      options: {
+        prismPreset: "night-owl",
+        preset: "@theme-ui/preset-funk",
+      },
+    },
+    // "@chakra-ui/gatsby-plugin",
     // "gatsby-plugin-postcss",
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
@@ -99,13 +109,14 @@ module.exports = {
                 }
                 slug
                 rawBody
+                excerpt(pruneLength: 300, truncate: true)
               }
             }
           }
         `,
         ref: "id",
         index: ["title", "body"],
-        store: ["id", "path", "title", "body"],
+        store: ["id", "slug", "title", "excerpt"],
         normalizer: ({ data }) =>
           data.allMdx.nodes.map(node => ({
             id: node.id,
@@ -114,6 +125,7 @@ module.exports = {
               node.frontmatter.title ||
               node.slug.substring(node.slug.lastIndexOf("/") + 1),
             body: node.rawBody,
+            excerpt: node.excerpt,
           })),
       },
     },
