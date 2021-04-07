@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx, Link, Box } from "theme-ui"
+import React from "react"
 import { Link as GatsbyLink, graphql } from "gatsby"
 import Main from "../components/main"
 import Seo from "../components/seo"
