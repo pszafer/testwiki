@@ -1,10 +1,4 @@
-import {
-  Box,
-  BoxProps,
-  Button,
-  ButtonProps,
-  useClipboard,
-} from "@chakra-ui/react"
+import { Box, ThemeUIStyleObject, Button, ButtonProps } from "theme-ui"
 import React from "react"
 import Highlight from "./highlight"
 
@@ -16,23 +10,29 @@ export const liveEditorStyle: React.CSSProperties = {
 
 
 const CopyButton = (props: ButtonProps) => (
-  <Button
-    size="sm"
-    position="absolute"
-    textTransform="uppercase"
-    colorScheme="teal"
-    fontSize="xs"
-    height="24px"
-    top={0}
-    zIndex="1"
-    right="1.25em"
+  <Button sx={{
+    size:"sm",
+    position:"absolute",
+    textTransform:"uppercase",
+    fontSize:"xs",
+    height:"24px",
+    top:0,
+    zIndex: 1,
+    right:"1.25em"
+  }}
     {...props}
   />
 )
 
 
-const CodeContainer = (props: BoxProps) => (
-  <Box padding="5" rounded="8px" my="8" bg="#011627" {...props} />
+const CodeContainer = (props: ThemeUIStyleObject) => (
+  <Box sx={{
+    padding: 5,
+    rounded:"8px",
+    my:8,
+    bg:"#011627",
+    ...props
+  }} />
 )
 
 function CodeBlock(props) {
@@ -45,13 +45,16 @@ function CodeBlock(props) {
   const editorCode = children.trim()
 
   const language = className?.replace(/language-/, "")
-  const { hasCopied, onCopy } = useClipboard(editorCode)
+  // const { hasCopied, onCopy } = useClipboard(editorCode)
 
 
 
 
   return (
-    <Box position="relative" zIndex="0">
+    <Box sx={{
+      position: "relative",
+      zIndex: 0
+    }}>
       <CodeContainer px="0" overflow="hidden">
         <Highlight
           codeString={editorCode}
@@ -60,9 +63,9 @@ function CodeBlock(props) {
           showLines={viewlines}
         />
       </CodeContainer>
-      <CopyButton top="4" onClick={onCopy}>
+      {/* <CopyButton top="4" onClick={onCopy}>
         {hasCopied ? "skopiowane" : "kopiuj"}
-      </CopyButton>
+      </CopyButton> */}
     </Box>
   )
 }

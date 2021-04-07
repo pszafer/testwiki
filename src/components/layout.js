@@ -1,15 +1,21 @@
+/** @jsx jsx */
+import { jsx } from "theme-ui"
+
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import Sidebar from "../components/sidebar"
 import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
+import { Box } from "theme-ui"
 import MenuButton from "./menu-button"
-import { Box } from "@chakra-ui/react"
 import Container from "./container"
+import Search from "./search"
 
 const Layout = props => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isSearch, setSearch] = useState(false)
   const toggle = () => setIsOpen(!isOpen)
+  const toggleSearch = () => setSearch(!isSearch)
 
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -23,34 +29,57 @@ const Layout = props => {
       }
     }
   `)
-
   return (
     <>
-      <MenuButton isOpen={isOpen} toggle={toggle} />
       <Header
         siteTitle={data.site.siteMetadata.title}
         github={data.site.siteMetadata.github}
         facebook={data.site.siteMetadata.facebook}
         discord={data.site.siteMetadata.discord}
-        toggle={toggle}
-        isOpen={isOpen}
+        toggleSearch={toggleSearch}
       />
-      <Container as="main" maxW="1400px">
-        <Box display={{ base: "block", md: "flex" }} height="100%">
+      <MenuButton toggle={toggle} isOpen={isOpen} />
+      {isSearch && (
+        <Search
+          closeSearch={() => {
+            if (isOpen) {
+              setIsOpen(false)
+            }
+            setSearch(false)
+          }}
+        />
+      )}
+      <Container as="main">
+        <Box
+          sx={{
+            display: ["block", "flex"],
+            height: "100%",
+          }}
+        >
           <Sidebar
             pathname={props.location?.pathname}
             isOpen={isOpen}
             closeMenu={() => setIsOpen(false)}
+            github={data.site.siteMetadata.github}
+            facebook={data.site.siteMetadata.facebook}
+            discord={data.site.siteMetadata.discord}
+            toggleSearch={toggleSearch}
           />
-          <div style={{ flex: 1 }}>
+          <div
+            sx={{
+              flex: 1,
+            }}
+          >
             <Box
               id="content"
-              pt={3}
-              px={5}
-              mx="auto"
-              minH="76vh"
-              mt="4.5rem"
-              maxW="58rem"
+              sx={{
+                pt: 3,
+                px: 3,
+                mx: "auto",
+                minHeight: "76vh",
+                mt: "4.5rem",
+                maxWidth: "58rem",
+              }}
             >
               {props.children}
             </Box>

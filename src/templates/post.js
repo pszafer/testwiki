@@ -1,8 +1,8 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Main from "./main"
+import Main from "../components/main"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import SEO from "./seo"
+import Seo from "../components/seo"
 
 const Post = ({ pageContext, data }) => {
   const {
@@ -22,7 +22,7 @@ const Post = ({ pageContext, data }) => {
       toc={tableOfContents}
       connectedTags={connectedTags}
     >
-      <SEO
+      <Seo
         title={title || slug.substring(slug.lastIndexOf("/") + 1)}
         description={excerpt}
       />
